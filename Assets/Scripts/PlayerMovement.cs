@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float walkSpeed; // Velocidad en la que se mueve el jugador
     [SerializeField] private float runSpeed; // Velocidad para correr
     private Vector3 dir = Vector3.zero; // Direccion empieza en 0
+    public Vector3 externalMoveSpeed; // Velocidad que recibe desde afuera (Plataforma)
 
     [Header("Salto")]
     private Rigidbody rb; // Rigidbody
@@ -28,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
 
         float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed; // Si aprieta shift corre, si no camina
 
-        Vector3 mover = dir.normalized * speed * Time.deltaTime;
+        Vector3 mover = dir.normalized * speed * Time.deltaTime + externalMoveSpeed * Time.deltaTime;
         transform.Translate(mover, Space.Self); // Se mueve con el eje local (Space.Self)
 
         // SALTO
