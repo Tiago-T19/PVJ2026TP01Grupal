@@ -12,6 +12,10 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb; // Rigidbody
     [SerializeField] private float jumpForce; // Fuerza de salto
 
+    // Arreglo de salto (Tiago)
+    private bool isGrounded = true;
+    //
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>(); // Busca en componente
@@ -32,10 +36,52 @@ public class PlayerMovement : MonoBehaviour
         Vector3 mover = dir.normalized * speed * Time.deltaTime + externalMoveSpeed * Time.deltaTime;
         transform.Translate(mover, Space.Self); // Se mueve con el eje local (Space.Self)
 
-        // SALTO
-        if (Input.GetKeyDown(KeyCode.Space)) //Al precionar espacio
+        // SALTO (Carla)
+        /* if (Input.GetKeyDown(KeyCode.Space)) //Al precionar espacio
+         {
+             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // Toma impulso hacia arriba
+         }*/
+
+        // Arreglo de salto (Tiago)
+        /*if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // Toma impulso hacia arriba
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+        }*/
+
+        //Arreglo de salto para las plataformas (Tiago)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
+
+    // Detecta el suelo para el salto (Tiago)
+    /* private void OnCollisionEnter(Collision collision)
+     {
+         if (collision.gameObject.CompareTag("Ground"))
+         {
+             isGrounded = true;
+         }
+     }
+     */
+
+
+    //Arreglo para detectar el suelo para el salto (Tiago)
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
+    }
+    //Final del arreglo de salto para el piso (Tiago)
 }
